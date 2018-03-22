@@ -1,7 +1,32 @@
+<!DOCTYPE>
+<html>
+<body>
+
+<input type="color" value="#ff0000" />
+<div id="example">Example Text</div>
 
 
+<script src="https://unpkg.com/brain.js@1.1.2/browser.min.js"></script>
+
+<script>
+function getRGB(hex) {
+ var shorthandRegex = /^#?([a-f\d])([a-f\d])$/i
+ hex = hex.replace(shorthandRegex, function(m,r,g,b){
+  return r + r + g + g + b + b
+ })
+
+ var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+ return result ? {
+  r: Math.round(parseInt(result[1], 16) / 2.55) / 100, 
+  g: Math.round(parseInt(result[2], 16) / 2.55) / 100, 
+  b: Math.round(parseInt(result[3], 16) / 2.55) / 100, 
+ } : null
+}
+
+</script>
 
 
+<script>
 
 const network = new brain.NeuralNetwork()
 
@@ -14,5 +39,24 @@ network.train([
  { input: { r: 0.31, g: 0.35, b: 0.41, }, output: { dark: 1 } },
 // { input: { r: 0, g: 1, b: 0.65, }, output: { light: 1 } },
 ])
+
+const result = network.run({ r: 0, g: 1, b: 0.65})
+
+</script>
+
+<script>
+const input = document.querySelector("input")
+const example = document.querySelector("#example")
+
+ input.addEventListener("change", (e) => {
+  example.style.background = e.target.value
+ })
+</script>
+
+
+</body>
+</html>
+
+
 
 
